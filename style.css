@@ -6,7 +6,15 @@
 /*   By: urabex <urabex@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:30:57 by urabex            #+#    #+#             */
-/*   Updated: 2024/12/15 01:30:58 by urabex           ###   ########.fr       */
+/*   Updated: 2024/12/15 01:41:31 by urabex           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+canvas {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -999;
+}
