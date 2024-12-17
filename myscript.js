@@ -6,7 +6,7 @@
 /*   By: urabex <urabex@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:30:40 by urabex            #+#    #+#             */
-/*   Updated: 2024/12/18 02:55:15 by urabex           ###   ########.fr       */
+/*   Updated: 2024/12/18 03:03:46 by urabex           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,45 @@ void main()
   gl_FragColor = vec4(color, 1.0);
 }`
 
+// frag4設定
+var frag4 = `
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 resolution;
+uniform float time;
+
+
+
+const float Pi = 3.14159;
+
+float sinApprox(float x)
+{
+  x = Pi * floor(x / Pi);
+  return (4.0 / Pi) * x - (4.0 / Pi) * x * abs(x);
+}
+
+float cosApprox(float x)
+{
+  return sinApprox(x * Pi);
+}
+
+void main()
+{
+  vec2 p = (2.0*gl_FragCoord.xy-resolution)/max(resolution.x,resolution.y);
+  for(int i = 1; i < 50; i++)
+  {
+    vec2 newp = p;
+    float speed = 100.0;
+    newp.x += 0.6/float(i)*sin(float(i)*p.y+time/(300.0/speed)+0.3*float(i));
+    newp.y += 0.6/float(i)*cos(float(i)*p.x+time/(300.0/speed)+0.3*float(i+10))-2.0;
+    p = newp;
+  }
+  vec3 color = vec3(.4 * tan(.6+p.y)+.5, 0.1*sin(3.2+p.y), .5+cos(p.x-p.y));
+  gl_FragColor = vec4(color, 1.0);
+}`
 
 function windowResized() {
     resizeCanvas(w, h);
