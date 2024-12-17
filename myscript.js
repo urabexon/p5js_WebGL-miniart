@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   myscript.js                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hurabe <hurabe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: urabex <urabex@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 01:30:40 by urabex            #+#    #+#             */
-/*   Updated: 2024/12/17 22:10:30 by hurabe           ###   ########.fr       */
+/*   Updated: 2024/12/18 02:55:15 by urabex           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ function draw() {
 		rect(0, 0, width, height);
 }
 
-
+// WebGLの頂点シェーダーコード(座標返還)
+// attributeで頂点ごとのデータをGPUに送る
 var vert = `
 #ifdef GL_E
 precision highp float;
@@ -92,6 +93,7 @@ void main() {
   // var_vertTexCoord = aTexCoord;
 }`;
 
+// frag設定
 var frag = `
 #ifdef GL_ES
 precision mediump float;
@@ -128,6 +130,7 @@ void main()
   gl_FragColor = vec4(color, 1.0);
 }`
 
+// frag1設定
 var frag1 = `
 
 #ifdef GL_ES
@@ -164,6 +167,87 @@ void main()
   vec3 color = vec3(1.4 * tan(0.6+p.y)+1.5, 1.0*sin(1.2*p.y), 1.6+cos(p.x+p.y));
   gl_FragColor = vec4(color, 1.0);
 }`
+
+// frag2設定
+var frag2 = `
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 resolution;
+uniform float time;
+
+
+
+const float Pi = 3.14159;
+
+float sinApprox(float x)
+{
+  x = Pi * floor(x / Pi);
+  return (4.0 / Pi) * x - (4.0 / Pi) * x * abs(x);
+}
+
+float cosApprox(float x)
+{
+  return sinApprox(x * Pi);
+}
+
+void main()
+{
+  vec2 p = (2.0*gl_FragCoord.xy-resolution)/max(resolution.x,resolution.y);
+  for(int i = 1; i < 50; i++)
+  {
+    vec2 newp = p;
+    float speed = 100.0;
+    newp.x += 0.6/float(i)*sin(float(i)*p.y+time/(300.0/speed)+0.3*float(i));
+    newp.y += 0.6/float(i)*cos(float(i)*p.x+time/(300.0/speed)+0.3*float(i+10))-2.0;
+    p = newp;
+  }
+  vec3 color = vec3(0.4 * tan(0.6+p.y)+.5, 1.0*tan(1.2/p.y), 1.6+sin(p.x+p.y));
+  gl_FragColor = vec4(color, 1.0);
+}`
+
+// frag3設定
+var frag3 = `
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 resolution;
+uniform float time;
+
+
+
+const float Pi = 3.14159;
+
+float sinApprox(float x)
+{
+  x = Pi * floor(x / Pi);
+  return (4.0 / Pi) * x - (4.0 / Pi) * x * abs(x);
+}
+
+float cosApprox(float x)
+{
+  return sinApprox(x * Pi);
+}
+
+void main()
+{
+  vec2 p = (2.0*gl_FragCoord.xy-resolution)/max(resolution.x,resolution.y);
+  for(int i = 1; i < 50; i++)
+  {
+    vec2 newp = p;
+    float speed = 100.0;
+    newp.x += 0.6/float(i)*sin(float(i)*p.y+time/(300.0/speed)+0.3*float(i));
+    newp.y += 0.6/float(i)*cos(float(i)*p.x+time/(300.0/speed)+0.3*float(i+10))-2.0;
+    p = newp;
+  }
+  vec3 color = vec3(2.4 * tan(.6+p.y)+.5, 1.1-sin(3.2+p.y), .1+cos(p.x+p.y));
+  gl_FragColor = vec4(color, 1.0);
+}`
+
 
 function windowResized() {
     resizeCanvas(w, h);
